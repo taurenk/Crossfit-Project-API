@@ -1,15 +1,14 @@
 
-from models import db, Athlete
+from models import Athlete
 from flask_restful import Resource
 from flask import abort
-from flask.ext.restful import fields, marshal, reqparse
+from flask.ext.restful import fields, marshal
 
 athlete_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'uri': fields.Url('athletes')
 }
-
 
 
 class AthletesAPI(Resource):
