@@ -1,4 +1,6 @@
 Flask
-SQLAlchemy
 psycopg2
 flask_restful
+flask_sqlalchemy
+
+
