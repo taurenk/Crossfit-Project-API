@@ -4,6 +4,7 @@ from flask_restful import Resource
 from flask import abort
 from flask.ext.restful import fields, marshal
 
+
 athlete_fields = {
     'id': fields.Integer,
     'name': fields.String,

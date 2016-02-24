@@ -2,6 +2,11 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+athlete_teams = db.Table('athlete_teams',
+    db.Column('athlete_id', db.Integer, db.ForeignKey('athletes.id')),
+    db.Column('team_id', db.Integer, db.ForeignKey('teams.id'))
+)
+
 
 class Athlete(db.Model):
 
@@ -22,4 +27,18 @@ class Athlete(db.Model):
     run_5k =        db.Column(db.String(32))
 
     def __repr__(self):
-        return "<%s>" % self.name
+        return "{'name' : '%s'}" % self.name
+
+
+class Team(db.Model):
+
+    __tablename__ = 'teams'
+
+    id =            db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    captain =          db.Column(db.String(64))
+    athletes = db.relationship('Athlete', secondary=athlete_teams,
+        backref=db.backref('teams', lazy='dynamic'))
+
+    def __repr__(self):
+        return "<%s, %s>" % (self.name, self.athletes)
