@@ -5,17 +5,38 @@ CREATE TABLE athletes (
     name              varchar(64),
 
     age      	        int,
-    hieght            varchar(5),
-    wieght            int,
-
+    height            varchar(5),
+    weight            int,
     clean_and_jerk    varchar(32),
     snatch            varchar(32),
     deadlift          varchar(32),
     back_squat        varchar(32),
     max_pullups       int,
     run_5k            varchar(32),
+    week1_score       int,
+    week2_score       int,
+    week3_score       int,
+    week4_score       int,
+    week5_score       int,
+
     created_at        timestamp default current_timestamp
 );
+
+
+CREATE TABLE affiliates (
+  id        	      serial PRIMARY KEY,
+  name              varchar(64),
+  state             varchar(64),
+  created_at        timestamp default current_timestamp
+);
+
+
+CREATE TABLE affiliate_athletes (
+   affiliate_id     int references affiliates(id),
+   athlete_id      int references athletes(id),
+   created_at        timestamp default current_timestamp
+);
+
 
 CREATE TABLE teams (
   id        	      serial PRIMARY KEY,
@@ -28,11 +49,13 @@ CREATE TABLE teams (
   week_five_score   int
 )
 
+
 CREATE TABLE athlete_teams(
    id           serial PRIMARY KEY,
    athlete_id   int references athletes(id),
    team_id      int references teams(id)
 )
+
 
 INSERT INTO teams (name, captain)
     VALUES

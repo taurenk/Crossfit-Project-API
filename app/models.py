@@ -14,11 +14,9 @@ class Athlete(db.Model):
 
     id =            db.Column(db.Integer, primary_key=True)
     name =          db.Column(db.String(64))
-
     age =           db.Column(db.Integer)
-    hieght =        db.Column(db.String(4))
-    wieght =        db.Column(db.Integer)
-
+    height =        db.Column(db.String(4))
+    weight =        db.Column(db.Integer)
     clean_and_jerk = db.Column(db.String(32))
     snatch =        db.Column(db.String(32))
     deadlift =      db.Column(db.String(32))

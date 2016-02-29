@@ -2,5 +2,5 @@ Flask
 psycopg2
 flask_restful
 flask_sqlalchemy
-
-
+beautifulsoup4
+requests
