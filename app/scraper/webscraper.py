@@ -24,6 +24,7 @@ def parse_athlete_data(html_doc):
         athlete_name = item.span.text
         athlete_data = {'profile_url': item.a['href'], 'image_url': item.img['src']}
         roster_map[athlete_name] = athlete_data
+        break
     return roster_map
 
 
@@ -53,12 +54,12 @@ def scrape_athlete_data(profile_url):
     #for iframe in iframexx:
     print iframexx[0].attrs['src']
     response = requests.get(iframexx[0].attrs['src'])
-    iframe_soup = BeautifulSoup(response.content, "html.parser")
-    data = iframe_soup.find_all("tr", class_="highlight")
-    print 'X: %s' % data
+    iframe_soup = BeautifulSoup(response.content, "lxml")
+    data = iframe_soup.find(class_="highlight")
+    print data
+    #print 'x'
+    #sprint data[0].find_all('span', attrs={'data-scoreid' : True})
 
-    import sys
-    sys.exit()
     return athlete_data
 
 
