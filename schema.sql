@@ -47,14 +47,14 @@ CREATE TABLE teams (
   week_three_score  int,
   week_four_score   int,
   week_five_score   int
-)
+);
 
 
 CREATE TABLE athlete_teams(
    id           serial PRIMARY KEY,
    athlete_id   int references athletes(id),
    team_id      int references teams(id)
-)
+);
 
 
 INSERT INTO teams (name, captain)

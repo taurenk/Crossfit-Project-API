@@ -35,9 +35,10 @@ def scrape_athlete_data(profile_url):
 
     stats = soup.find_all('dd')
     athlete_data['age'] = stats[4].text
-    athlete_data['hieght'] = stats[5].text
-    athlete_data['wieght'] = stats[6].text
+    athlete_data['height'] = stats[5].text
+    athlete_data['weight'] = stats[6].text
 
+    # Get Lifts
     for row in soup.find_all("tr"):
         if row.th is None:
             stats = row.find_all('td')
@@ -46,6 +47,18 @@ def scrape_athlete_data(profile_url):
             if metric == '--':
                 metric = None
             athlete_data[stat] = metric
+
+    # Get Open Workout Scores
+    iframexx = soup.find_all('iframe')
+    #for iframe in iframexx:
+    print iframexx[0].attrs['src']
+    response = requests.get(iframexx[0].attrs['src'])
+    iframe_soup = BeautifulSoup(response.content, "html.parser")
+    data = iframe_soup.find_all("tr", class_="highlight")
+    print 'X: %s' % data
+
+    import sys
+    sys.exit()
     return athlete_data
 
 
