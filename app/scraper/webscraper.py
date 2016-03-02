@@ -4,12 +4,15 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def scraper():
-    team_page = requests.get("http://games.crossfit.com/team/4666")
+def scraper(affiliate_id=4666):
+    team_page = requests.get("http://games.crossfit.com/team/%s" % affiliate_id)
     athletes = parse_athlete_data(team_page.content)
     for athlete_name, data in athletes.iteritems():
         stats = scrape_athlete_data(data['profile_url'])
         athletes[athlete_name].update(stats)
+        print stats
+        break
+
     print 'Loaded data for %s Athletes.' % len(athletes)
     return athletes
 
@@ -24,7 +27,7 @@ def parse_athlete_data(html_doc):
         athlete_name = item.span.text
         athlete_data = {'profile_url': item.a['href'], 'image_url': item.img['src']}
         roster_map[athlete_name] = athlete_data
-        break
+
     return roster_map
 
 
@@ -35,6 +38,7 @@ def scrape_athlete_data(profile_url):
     athlete_data = {}
 
     stats = soup.find_all('dd')
+    athlete_data['gender'] = stats[3].text
     athlete_data['age'] = stats[4].text
     athlete_data['height'] = stats[5].text
     athlete_data['weight'] = stats[6].text
@@ -49,16 +53,18 @@ def scrape_athlete_data(profile_url):
                 metric = None
             athlete_data[stat] = metric
 
-    # Get Open Workout Scores
+    # Get Open Workout Scores - Athlete scoreboard is in Iframe:
     iframexx = soup.find_all('iframe')
-    #for iframe in iframexx:
-    print iframexx[0].attrs['src']
+
     response = requests.get(iframexx[0].attrs['src'])
     iframe_soup = BeautifulSoup(response.content, "lxml")
     data = iframe_soup.find(class_="highlight")
-    print data
-    #print 'x'
-    #sprint data[0].find_all('span', attrs={'data-scoreid' : True})
+
+    for index, score_html in enumerate(data.find_all('span', attrs={'data-scoreid' : True})):
+        html = str(score_html)
+        if "(" in html:
+            key = "week_%s_score" % index
+            athlete_data[key] = html[html.index("(")+1: html.index(")")]
 
     return athlete_data
 
