@@ -1,9 +1,17 @@
-from app.models import Athlete, db
+from app.models import Athlete, Affiliate, db
 
 
 def load_affiliate_data(affiliate_data):
-    pass
 
+    affiliate_record = Affiliate(name=affiliate_data['name'],
+                                 logo_url=affiliate_data['logo_url'],
+                                 state=affiliate_data['state'],
+                                 country =affiliate_data['country'],
+                                 affiliate_id =affiliate_data['affiliate_id']
+                                 )
+
+    db.session.add(affiliate_record)
+    db.session.commit()
 
 
 def load_athlete_data(athletes_data):
@@ -39,6 +47,11 @@ def load_athlete_data(athletes_data):
         db.session.add(athlete_record)
 
     db.session.commit()
+
+
+def load_affiliate_athlete_table(affiliate_id):
+    pass
+
 
 def clean_string(s):
 

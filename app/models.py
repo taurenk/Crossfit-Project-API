@@ -34,7 +34,7 @@ class Athlete(db.Model):
         return "{'name' : '%s'}" % self.name
 
 
-class Affiliates(db.Model):
+class Affiliate(db.Model):
 
     __tablename__ = 'affiliates'
 

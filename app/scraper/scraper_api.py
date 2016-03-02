@@ -10,6 +10,10 @@ def scrape():
     affiliate_id = request.args.get('affiliate_id')
     print "SCRAPING AFFILIATE ID: %s" % affiliate_id
 
+
+    affiliate_data = webscraper.affiliate_scraper(affiliate_id)
+    db_loader.load_affiliate_data(affiliate_data)
+
     athlete_data = webscraper.affiliate_athletes_scraper()
     db_loader.load_athlete_data(athlete_data)
 

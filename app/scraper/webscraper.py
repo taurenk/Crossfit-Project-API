@@ -23,9 +23,11 @@ def affiliate_scraper(affiliate_id=3451):
     team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
     soup = BeautifulSoup(team_page.content, "html.parser")
 
-    profile_html =  soup.find(class_="profile-details")
-
+    affiliate_data['name'] = soup.find(class_="title").text.replace("Affiliate:", "").strip()
     affiliate_data['affiliate_id'] = affiliate_id
+
+    profile_html = soup.find(class_="profile-details")
+
     affiliate_data['logo_url'] = profile_html.find('img')['src']
 
     profile_details = profile_html.find_all("dd")
