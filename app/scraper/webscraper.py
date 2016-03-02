@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def affiliate_athleres_scraper(affiliate_id=3451):
-    # team page should be switched to http://games.crossfit.com/affiliate/XXX
+def affiliate_athletes_scraper(affiliate_id=3451):
     team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
     athletes = parse_athlete_data(team_page.content)
     for athlete_name, data in athletes.iteritems():
@@ -16,10 +15,22 @@ def affiliate_athleres_scraper(affiliate_id=3451):
     return athletes
 
 
-def affiliate_scraper(affiliate_id=4666):
-    team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
-    team_html = team_page.content
+def affiliate_scraper(affiliate_id=3451):
 
+    affiliate_data = {}
+
+    team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
+    soup = BeautifulSoup(team_page.content, "html.parser")
+
+    profile_html =  soup.find(class_="profile-details")
+
+    affiliate_data['logo_url'] = profile_html.find('img')['src']
+
+    profile_details = profile_html.find_all("dd")
+    affiliate_data['state'] = profile_details[3].text
+    affiliate_data['country'] = profile_details[5].text
+
+    return affiliate_data
 
 
 def parse_athlete_data(html_doc):
@@ -75,4 +86,4 @@ def scrape_athlete_data(profile_url):
 
 
 if __name__ == '__main__':
-    affiliate_athleres_scraper()
+    affiliate_scraper()
