@@ -4,23 +4,27 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def scraper(affiliate_id=4666):
-    team_page = requests.get("http://games.crossfit.com/team/%s" % affiliate_id)
+def affiliate_athleres_scraper(affiliate_id=3451):
+    # team page should be switched to http://games.crossfit.com/affiliate/XXX
+    team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
     athletes = parse_athlete_data(team_page.content)
     for athlete_name, data in athletes.iteritems():
         stats = scrape_athlete_data(data['profile_url'])
         athletes[athlete_name].update(stats)
-        print stats
-        break
 
     print 'Loaded data for %s Athletes.' % len(athletes)
     return athletes
 
 
+def affiliate_scraper(affiliate_id=4666):
+    team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
+    team_html = team_page.content
+
+
+
 def parse_athlete_data(html_doc):
     soup = BeautifulSoup(html_doc, "html.parser")
-    roster_block = soup.find(id="block-search-athlete-affiliate-team-blocks-team-roster")
-
+    roster_block = soup.find(id="block-search-athlete-affiliate-team-blocks-affiliate-athletes")
     roster_map = defaultdict(dict)
 
     for item in roster_block.find_all('li'):
@@ -71,4 +75,4 @@ def scrape_athlete_data(profile_url):
 
 
 if __name__ == '__main__':
-    scraper()
+    affiliate_athleres_scraper()
