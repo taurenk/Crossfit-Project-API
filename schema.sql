@@ -3,7 +3,7 @@
 CREATE TABLE athletes (
     id        	      serial PRIMARY KEY,
     name              varchar(64),
-
+    gender            varchar(1),
     age      	        int,
     height            varchar(5),
     weight            int,
@@ -18,49 +18,24 @@ CREATE TABLE athletes (
     week3_score       int,
     week4_score       int,
     week5_score       int,
-
     created_at        timestamp default current_timestamp
 );
 
 
 CREATE TABLE affiliates (
   id        	      serial PRIMARY KEY,
+  affiliate_id      varchar(10),
   name              varchar(64),
   state             varchar(64),
+  country           varchar(64),
+  logo_url          varchar(128),
   created_at        timestamp default current_timestamp
 );
 
 
 CREATE TABLE affiliate_athletes (
    affiliate_id     int references affiliates(id),
-   athlete_id      int references athletes(id),
-   created_at        timestamp default current_timestamp
+   athlete_id       int references athletes(id),
+   created_at       timestamp default current_timestamp
 );
 
-
-CREATE TABLE teams (
-  id        	      serial PRIMARY KEY,
-  name              varchar(64),
-  captain           varchar(64),
-  week_one_score    int,
-  week_two_score    int,
-  week_three_score  int,
-  week_four_score   int,
-  week_five_score   int
-);
-
-
-CREATE TABLE athlete_teams(
-   id           serial PRIMARY KEY,
-   athlete_id   int references athletes(id),
-   team_id      int references teams(id)
-);
-
-
-INSERT INTO teams (name, captain)
-    VALUES
-    ('Premature WallBalding', 'Cam'),
-    ('50 Shades of Gainz', 'Manny'),
-    ('EMObility', 'Chris'),
-    ('Panic at the Burpees', 'Adam'),
-    ('MerMannies', 'Bobby');

@@ -10,6 +10,7 @@ def affiliate_athletes_scraper(affiliate_id=3451):
     for athlete_name, data in athletes.iteritems():
         stats = scrape_athlete_data(data['profile_url'])
         athletes[athlete_name].update(stats)
+        print athlete_name
 
     print 'Loaded data for %s Athletes.' % len(athletes)
     return athletes
@@ -24,9 +25,11 @@ def affiliate_scraper(affiliate_id=3451):
 
     profile_html =  soup.find(class_="profile-details")
 
+    affiliate_data['affiliate_id'] = affiliate_id
     affiliate_data['logo_url'] = profile_html.find('img')['src']
 
     profile_details = profile_html.find_all("dd")
+
     affiliate_data['state'] = profile_details[3].text
     affiliate_data['country'] = profile_details[5].text
 
@@ -78,7 +81,7 @@ def scrape_athlete_data(profile_url):
     for index, score_html in enumerate(data.find_all('span', attrs={'data-scoreid' : True})):
         html = str(score_html)
         if "(" in html:
-            key = "week_%s_score" % index
+            key = "week_%s_score" % (index+1)
             athlete_data[key] = html[html.index("(")+1: html.index(")")]
 
     return athlete_data

@@ -13,19 +13,14 @@ def create_app(config_file):
 
     from athlete_api import AthletesAPI, AthletesListAPI
     from athlete_stats_api import StrongestAthletesAPI
-    from team_api import TeamsListAPI
     from app.scraper.scraper_api import scraper_api
 
-
     application.register_blueprint(scraper_api, url_prefix='/api/scraper')
+
 
     api.add_resource(AthletesListAPI, '/api/athletes', endpoint='athletes_list')
     api.add_resource(AthletesAPI, '/api/athletes/<int:id>', endpoint='athletes')
     api.add_resource(StrongestAthletesAPI, '/api/athletes/stats/strongest', endpoint='strongest_athletes')
-
-    api.add_resource(TeamsListAPI, '/api/teams', endpoint='teams_list')
-
-
 
 
     @application.after_request
