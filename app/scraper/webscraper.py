@@ -7,10 +7,14 @@ import requests
 def affiliate_athletes_scraper(affiliate_id=3451):
     team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
     athletes = parse_athlete_data(team_page.content)
+
+    index = 0
     for athlete_name, data in athletes.iteritems():
         stats = scrape_athlete_data(data['profile_url'])
         athletes[athlete_name].update(stats)
-        print athlete_name
+        index +=1
+        if index == 10:
+            break
 
     print 'Loaded data for %s Athletes.' % len(athletes)
     return athletes
@@ -39,7 +43,7 @@ def affiliate_scraper(affiliate_id=3451):
 
 
 def parse_athlete_data(html_doc):
-    soup = BeautifulSoup(html_doc, "html.parser")
+    soup = BeautifulSoup(html_doc, "lxml")
     roster_block = soup.find(id="block-search-athlete-affiliate-team-blocks-affiliate-athletes")
     roster_map = defaultdict(dict)
 
@@ -54,7 +58,7 @@ def parse_athlete_data(html_doc):
 def scrape_athlete_data(profile_url):
 
     athlete_page = requests.get("http://games.crossfit.com" + profile_url)
-    soup = BeautifulSoup(athlete_page.content, "html.parser")
+    soup = BeautifulSoup(athlete_page.content, "lxml")
     athlete_data = {}
 
     stats = soup.find_all('dd')
@@ -75,8 +79,7 @@ def scrape_athlete_data(profile_url):
 
     # Get Open Workout Scores - Athlete scoreboard is in Iframe:
     iframexx = soup.find_all('iframe')
-
-    response = requests.get(iframexx[0].attrs['src'])
+    response = requests.get('http:' + iframexx[0].attrs['src'])
     iframe_soup = BeautifulSoup(response.content, "lxml")
     data = iframe_soup.find(class_="highlight")
 

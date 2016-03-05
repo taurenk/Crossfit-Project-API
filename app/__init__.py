@@ -11,17 +11,18 @@ def create_app(config_file):
     db.init_app(application)
     api = Api(application)
 
-    from athlete_api import AthletesAPI, AthletesListAPI
+    from affiliates_api import AffiliateAPI
+    from athlete_api import AthletesAPI, AthletesByAffiliateAPI
     from athlete_stats_api import StrongestAthletesAPI
     from app.scraper.scraper_api import scraper_api
 
-    application.register_blueprint(scraper_api, url_prefix='/api/scraper')
+    api.add_resource(AffiliateAPI, '/api/affiliates/<int:id>', endpoint='affiliates')
+    api.add_resource(AthletesByAffiliateAPI, '/api/affiliates/<int:id>/athletes', endpoint='affiliates_athletes')
 
-
-    api.add_resource(AthletesListAPI, '/api/athletes', endpoint='athletes_list')
     api.add_resource(AthletesAPI, '/api/athletes/<int:id>', endpoint='athletes')
     api.add_resource(StrongestAthletesAPI, '/api/athletes/stats/strongest', endpoint='strongest_athletes')
 
+    application.register_blueprint(scraper_api, url_prefix='/api/scraper')
 
     @application.after_request
     def after_request(response):

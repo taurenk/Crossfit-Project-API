@@ -1,12 +1,15 @@
 
+DROP TABLE athletes;
+DROP TABLE  affiliates;
+
 
 CREATE TABLE athletes (
     id        	      serial PRIMARY KEY,
     name              varchar(64),
     gender            varchar(1),
     age      	        int,
-    height            varchar(5),
-    weight            int,
+    height            varchar(10),
+    weight            varchar(10),
     clean_and_jerk    varchar(32),
     snatch            varchar(32),
     deadlift          varchar(32),
@@ -18,13 +21,15 @@ CREATE TABLE athletes (
     week3_score       int,
     week4_score       int,
     week5_score       int,
+
+    affiliate_id      int references affiliates(id),
+
     created_at        timestamp default current_timestamp
 );
 
 
 CREATE TABLE affiliates (
-  id        	      serial PRIMARY KEY,
-  affiliate_id      varchar(10),
+  id                int PRIMARY KEY,
   name              varchar(64),
   state             varchar(64),
   country           varchar(64),
@@ -32,10 +37,4 @@ CREATE TABLE affiliates (
   created_at        timestamp default current_timestamp
 );
 
-
-CREATE TABLE affiliate_athletes (
-   affiliate_id     int references affiliates(id),
-   athlete_id       int references athletes(id),
-   created_at       timestamp default current_timestamp
-);
 

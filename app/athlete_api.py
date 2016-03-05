@@ -11,12 +11,14 @@ athlete_fields = {
     'uri': fields.Url('athletes'),
 
     'age': fields.Integer,
-    'hieght': fields.String,
-    'wieght': fields.String,
+    'height': fields.String,
+    'weight': fields.String,
     'clean_and_jerk': fields.String,
     'snatch': fields.String,
     'deadlift': fields.String,
-    'back_squat': fields.String
+    'back_squat': fields.String,
+
+    'affiliate_id':  fields.Integer
 }
 
 
@@ -33,13 +35,13 @@ class AthletesAPI(Resource):
         return {'result': marshal(athlete_record, athlete_fields)}
 
 
-class AthletesListAPI(Resource):
+class AthletesByAffiliateAPI(Resource):
 
     def __init__(self):
-        super(AthletesListAPI, self).__init__()
+        super(AthletesByAffiliateAPI, self).__init__()
 
-    def get(self):
-        athlete_records = Athlete.query.all()
+    def get(self, id):
+        athlete_records = Athlete.query.filter_by(affiliate_id=id).all()
 
         if not athlete_records:
             return abort(404)
