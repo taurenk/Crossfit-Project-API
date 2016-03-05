@@ -2,19 +2,19 @@
 from collections import defaultdict
 from bs4 import BeautifulSoup
 import requests
+from requests import ConnectionError
 
+import logging
+my_logger = logging.getLogger("app.log")
 
 def affiliate_athletes_scraper(affiliate_id=3451):
     team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
     athletes = parse_athlete_data(team_page.content)
 
-    index = 0
+
     for athlete_name, data in athletes.iteritems():
         stats = scrape_athlete_data(data['profile_url'])
         athletes[athlete_name].update(stats)
-        index +=1
-        if index == 10:
-            break
 
     print 'Loaded data for %s Athletes.' % len(athletes)
     return athletes
@@ -23,8 +23,12 @@ def affiliate_athletes_scraper(affiliate_id=3451):
 def affiliate_scraper(affiliate_id=3451):
 
     affiliate_data = {}
+    try:
+        team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
+    except ConnectionError:
+        my_logger.error("Affiliate %s does not exists" % affiliate_id)
+        raise ConnectionError
 
-    team_page = requests.get("http://games.crossfit.com/affiliate/%s" % affiliate_id)
     soup = BeautifulSoup(team_page.content, "html.parser")
 
     affiliate_data['name'] = soup.find(class_="title").text.replace("Affiliate:", "").strip()

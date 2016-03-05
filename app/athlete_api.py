@@ -42,7 +42,6 @@ class AthletesByAffiliateAPI(Resource):
 
     def get(self, id):
         athlete_records = Athlete.query.filter_by(affiliate_id=id).all()
-
         if not athlete_records:
             return abort(404)
 
