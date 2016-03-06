@@ -30,11 +30,12 @@ def create_app(config_file):
     application.logger.info("REST API Started.")
 
 
-    from affiliates_api import AffiliateAPI
+    from affiliates_api import AffiliateAPI, AffiliatesListAPI
     from athlete_api import AthletesAPI, AthletesByAffiliateAPI
     from athlete_stats_api import StrongestAthletesAPI
     from app.scraper.scraper_api import scraper_api
 
+    api.add_resource(AffiliatesListAPI, '/api/affiliates', endpoint='affiliates_list')
     api.add_resource(AffiliateAPI, '/api/affiliates/<int:id>', endpoint='affiliates')
     api.add_resource(AthletesByAffiliateAPI, '/api/affiliates/<int:id>/athletes', endpoint='affiliates_athletes')
 

@@ -31,3 +31,18 @@ class AffiliateAPI(Resource):
         if not affiliate_record:
             return abort(404)
         return {'result': marshal(affiliate_record, affiliate_fields)}
+
+
+
+class AffiliatesListAPI(Resource):
+
+    def __init__(self):
+        super(AffiliatesListAPI, self).__init__()
+
+    def get(self):
+        affiliate_records = Affiliate.query.all()
+
+        if not affiliate_records:
+            return abort(404)
+        return {'results': marshal(affiliate_records, affiliate_fields)}
+
